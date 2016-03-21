@@ -231,7 +231,7 @@ def update_locfile(root,ns,trans,keywords,locfile,f,args):
       print '\t'+FAIL+'removing\t'+ENDC, elem.attrib.get('id')
       elem.getparent().remove(elem)
 
-  # Add new trans-units
+  # Add the new trans-units
   for elem in root.iter(tag=ns+'body'): #skip over other elements between root and body
     body = elem
 
