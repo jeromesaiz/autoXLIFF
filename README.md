@@ -33,7 +33,7 @@ With the `--dry` flag, the program will display the number of translation tokens
 By default autoXLIFF will look for Twig templates and XLIFF files in the default Silex directories (*views/* and *locales/*). 
 This can be changed using the --locdir parameter (relative path to your project's locales directory) and --twigdir (relative path to your project's Twig templates)
 
-As usual, autoXLIFF -h will display some help.
+As usual, `autoXLIFF -h` will display some help.
 
 ## Opinions
 You might be wondering why the default language pair for creating new XLIFF files is en/en. This is because autoXLIFF works on the premises that your source language is actually translation tokens.
