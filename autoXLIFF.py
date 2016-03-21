@@ -189,7 +189,7 @@ def parse_twig(twigfiles):
   return keywords
 
 
-# Gets a list of all trans-units already defined within the language file from loaded XML object
+# Gets a list of all trans-units already defined within the loaded XML object
 # @input object (Element) representing the XLIFF root
 # @input STRING as the XLIFF namespace
 # @return SET (list of existing trans-units)
@@ -201,7 +201,7 @@ def get_trans_units(root,ns):
   return trans
 
 
-# Adds or remove trans keywords to/from locfile and writes it back
+# Adds or remove trans keywords to/from XML structure and writes it back
 # @input object (Element) representing XLIFF root
 # @input STRING as the XLIFF namespace
 # @input SET (list of existing trans-units within the XLIFF language file)
@@ -224,9 +224,8 @@ def update_locfile(root,ns,trans,keywords,locfile,f,args):
     return
 
   # Remove trans-units that are not used in Twig templates anymore
-  # This be optimized as we parse & iterate twice on the same XML structure here (see get_trans_units)
+  # This could be optimized as we parse & iterate twice on the same XML structure here (see get_trans_units)
   # But this allows to decorrelate the getting of trans-units list and the actual XML structure manipulation
-  #trans_units = xml.getroot().iter(tag="{urn:oasis:names:tc:xliff:document:1.2}trans-unit")
   for elem in root.iter(tag=ns+'trans-unit'):
     if elem.attrib.get('id') in to_delete:
       print '\t'+FAIL+'removing\t'+ENDC, elem.attrib.get('id')
