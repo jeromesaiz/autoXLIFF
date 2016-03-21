@@ -1,5 +1,5 @@
 # autoXLIFF
-A tool to help developers manage their XLIFF translation files automatically from their Twig templates. It works out of box with Silex and is flexible enough to work with other frameworks that are using Twig.
+A tool to help developers manage their XLIFF translation files automatically from their Twig templates. It works out of box with Silex/Symphony and is flexible enough to work with other frameworks that are using Twig.
 
 Pull requests welcome to improve this project !
 
@@ -58,7 +58,7 @@ Thanks to an massively ungodly regex, autoXLIFF is able to recognize the followi
 * {% trans with {'%name%': 'Jerome'} %}Hello %name%{% endtrans %}
 * {{ 'register.new-account%name%'|trans({'%name%': 'jerome'}) }}
 
-white spaces and single or double are irrelevant, and the search is case insensitive. 
+white spaces and single or double are irrelevant, and the search is case insensitive. Also, the search within the Twig templates directory is recursive, so you don't need to worry about subfolders.
 
 Please note that at this time autoXLIFF does not support *transchoice* tags.
 
@@ -70,6 +70,12 @@ The intended use for this program is to start fresh from your web project and le
 When working with existing XLIFF files autoXLIFF will usually import them alright. But after updating it will write back to that very same file and overwrite its body section with a much simpler XLIFF that what you're probably working with.
 
 It will (should...) preserve the header and its content (*phase-group* blocks and such). But everything inside the \<body\> tag will be overwritten with a very basic trans-units grammar. It's fine, but it will not save your *maxbytes* and *xml:lang*, for example. Be warned !
+As usual, make backup. This software is offered as is and I do not make any guarantee about its operation.
+
+## Future versions
+Depending on feedback, I might add support for :
+- Transchoice syntax (I guess I'll add it once I need it)
+- Kind of plugable regex to allow for easy adaptation to another framework syntax (just write the regex, put in in a file and autoXLIFF will load it instead of its default Silex/Symphony Twig bridge syntax. 
 
 ## What can I use to actually translate my project ?
 autoXLIFF will create and manage XLIFF files automatically for you. Provided you run it regularly, it will keep their content in sync with your actual Twig templates content.
