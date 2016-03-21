@@ -6,16 +6,16 @@ Pull requests welcome to improve this project !
 If you don't #RTFM, please read the warnings at the bottom of this file !
 
 ## Description
-autoXLIFF will scan your Twig templates looking for translation tokens and will then update your project's XLIFF files accordingly. It will even create them for you if needed.
+autoXLIFF will scan your Twig templates looking for translation tokens. It will then update your project's XLIFF files accordingly, or create them for you if needed.
 
-autoXLIFF will add the new tokens it found in your Twig templates to your translation files, and it will prune old entries (those translation units in your XLIFF files that do not match any tokens in your Twig templates).
+Not only will autoXLIFF add new tokens from your Twig templates to your translation files, it will also prune their old entries (those translation units in your XLIFF files that do not match any more tokens in your Twig templates).
 
-Using autoXLIFF you will be able to automatically create XLIFF files for all the translated strings in your projet and keep your Twig templates in sync with your XLIFF files.
+Using autoXLIFF you will be able to automatically create XLIFF files for all translated strings in your projets and keep your Twig templates in sync with your XLIFF files.
 
 ## Usage
 Scan your project's Twig templates and create or update your english translation file:
 `autoXLIFF.py /path/to/project en.xlf`
-if that file does not exist, this is equivalent as running:
+if that file does not exist, this is equivalent as :
 `autoXLIFF.py /path/to/project en.xlf --lang en/en`
 
 Scan your project's Twig templates and create a translation file from english to french:
