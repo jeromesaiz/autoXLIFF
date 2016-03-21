@@ -42,9 +42,7 @@ def get_args():
 # 1/ that localization file we need to process (it will be created if it does not exist and its full path returned)
 # 2/ the correct Twig views directory
 # @input argparse.Namespace
-# @return LIST (path to localization file)
-# @return LIST (path to Twig views directory)
-# @return FILE (descriptor for language file just created or opened from disk)
+# @return LIST (STR path to localization file, STR path to Twig views directory, FILE (descriptor for language file just created or opened from disk)
 def get_setup(args):
   if not os.path.exists(args.app_path):
     print FAIL+'FATAL : '+ENDC+args.app_path+' does not seem to be workable. Try another directory.'
@@ -92,7 +90,7 @@ def get_setup(args):
 
 # Create a XLIFF XML structure
 # @input argparse.Namespace
-# @return FILE (descriptor for language file created)
+# @return STRING (basic XML XLIFF structure )
 def create_xliff(args):
 
   if args.lang:
@@ -119,7 +117,7 @@ def create_xliff(args):
 # @intput STRING (absolute path to XLIFF language file to load **OR** XLIFF empty structure)
 # @return False if file is no XML or not XLIFF
 # @return object (etree Element) as XML root if content is valid XLIFF
-# @return STRING as XLIFF namespace of document (if imported)
+# @return STRING as XLIFF namespace of document (if imported, else empty string) or None if importation triggered an error
 def load_xliff(xml_content):
 
   # Read content from disk if argument is a valid file
@@ -158,7 +156,7 @@ def load_xliff(xml_content):
   return root,ns
 
 
-# Iterate on Twig views to locate translation tags to process
+# Build a list of Twig template files, which we'll use later to locate translation tags
 # @input STRING (path to Twig views)
 # @return LIST (absolute paths to Twig views, parsed recursively)
 def twig_explore(twigdir):
@@ -170,9 +168,9 @@ def twig_explore(twigdir):
 
 
 # Parse a list of Twig files to extract individual trans keywords
-# Supports three notations for Twig trans (see readme)
+# Supports several types of Twig translation tags (see readme)
 # @input LIST (absolute path to individual Twig templates)
-# @return SET (list of all trans keywords found in the templates)
+# @return SET (list of all Twig translation tags found in the templates)
 def parse_twig(twigfiles):
   keywords = set()
   pattern = re.compile("{% ?trans ?%}(.*?){% ?endtrans ?%}|{{ ?[\'|\"](.*?)[\'|\"] ?\| ?trans ?}}|{{ ?.*?\.translator\.trans\([\'|\"](.*?)[\'|\"]\) ?}}|{% ?trans ?with.*?}.*%}(.*?){% ?endtrans ?%}|{{ ?[\'|\"](.*?)[\'|\"]\|trans\(.*\) ?}}",
@@ -193,6 +191,7 @@ def parse_twig(twigfiles):
 
 # Gets a list of all trans-units already defined within the language file from loaded XML object
 # @input object (Element) representing the XLIFF root
+# @input STRING as the XLIFF namespace
 # @return SET (list of existing trans-units)
 def get_trans_units(root,ns):
   trans=set()
@@ -203,9 +202,13 @@ def get_trans_units(root,ns):
 
 
 # Adds or remove trans keywords to/from locfile and writes it back
-# @input object (ElementTree) representing XLIFF language file
+# @input object (Element) representing XLIFF root
+# @input STRING as the XLIFF namespace
 # @input SET (list of existing trans-units within the XLIFF language file)
 # @input SET (list of unique trans-unit keywords located across all Twig views)
+# @input STRING (path to XLIFF file)
+# @input FILE (file descriptor to XLIFF file)
+# @input argparse.Namespace
 # @return VOID
 def update_locfile(root,ns,trans,keywords,locfile,f,args):
   to_add=keywords-trans
