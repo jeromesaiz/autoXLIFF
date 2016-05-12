@@ -30,7 +30,7 @@ Scan your project's Twig templates and see what changes would have been made to 
 With the `--dry` flag, the program will display the number of translation tokens count and will show what translation units need to be added and/or removed to your XLIFF files in order to stay in sync. It's a safe way to actually test autoXLIFF.
 
 ## Options
-By default autoXLIFF will look for Twig templates and XLIFF files in the default Silex directories (*views/* and *locales/*). 
+By default autoXLIFF will look for Twig templates and XLIFF files in the default Silex directories (*views/* and *locales/*).
 This can be changed using the --locdir parameter (relative path to your project's locales directory) and --twigdir (relative path to your project's Twig templates)
 
 As usual, `autoXLIFF -h` will display some help.
@@ -38,11 +38,11 @@ As usual, `autoXLIFF -h` will display some help.
 ## Opinions
 You might be wondering why the default language pair for creating new XLIFF files is en/en. This is because autoXLIFF works on the premises that your source language is actually translation tokens.
 So that first en/en file will actually translate stuff like this :
-* register.form.title = Create a new account 
+* register.form.title = Create a new account
 * register.form.name = Last name
 
 While your en/fr file will match the same stuff like this :
-* register.form.title = Créer un nouveau compte 
+* register.form.title = Créer un nouveau compte
 * register.form.name = Nom
 
 Of course, if you do not use translation tokens in your project that's fine. You won't need to create that initial en/en file and can go ahead creating your first international language file with `autoXLIFF.py /path/to/project fr.xlf`, for example. It'll show your original language strings in english all right.
@@ -75,7 +75,10 @@ As usual, make backup. This software is offered as is and I do not make any guar
 ## Future versions
 Depending on feedback, I might add support for :
 - Transchoice syntax (I guess I'll add it once I need it)
-- Kind of plugable regex to allow for easy adaptation to another framework syntax (just write the regex, put in in a file and autoXLIFF will load it instead of its default Silex/Symphony Twig bridge syntax. 
+- Kind of plugable regex to allow for easy adaptation to another framework syntax (just write the regex, put in in a file and autoXLIFF will load it instead of its default Silex/Symphony Twig bridge syntax.
+
+## addXLIFF tool
+addXLIFF is a companion tool useful when you need to force-add translation strings. You'll probably use it to add to your existing XLIFF files those trans-units that are declared outside your Twig templates (like form labels declared within controllers).
 
 ## What can I use to actually translate my project ?
 autoXLIFF will create and manage XLIFF files automatically for you. Provided you run it regularly, it will keep their content in sync with your actual Twig templates content.
