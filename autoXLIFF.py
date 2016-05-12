@@ -3,7 +3,7 @@
 
 __description__ = 'A tool to help developpers create and update their XLIFF translation files automatically from Twig views. Works out of the box with Silex'
 __author__ = 'Jerome Saiz (https://twitter.com/jeromesaiz)'
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 __date__ = '2016/03/19'
 
 # Coloring definition
@@ -102,8 +102,8 @@ def create_xliff(args):
 
   # build simple XLIFF root structure
   new_file="""
-<xliff version="1.2">
-<file source-language="{0}" target-language="{1}" tool='autoXLIFF' datatype="plaintext" original="{2}">
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+<file source-language="{0}" target-language="{1}" datatype="plaintext" original="{2}">
 <body>
 </body>
 </file>
@@ -142,7 +142,7 @@ def load_xliff(xml_content):
   else:
     try:
       root = etree.fromstring(xml_content)
-      ns = ''
+      ns = re.search(r'({.*})xliff', root.tag).group(1) # extract existing namespace, if any
     except:
       print 'Error : XML validation failed (from string)'
       except_class,except_message,except_tb = sys.exc_info()
@@ -232,7 +232,7 @@ def update_locfile(root,ns,trans,keywords,locfile,f,args):
       elem.getparent().remove(elem)
 
   # Add the new trans-units
-  for elem in root.iter(tag=ns+'body'): #skip over other elements between root and body
+  for elem in root.iter(tag=ns+'body'): #ugly hack to skip over other elements between root and body
     body = elem
 
   # Create the new trans-unit elements
