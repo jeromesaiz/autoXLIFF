@@ -3,7 +3,7 @@
 
 __description__ = 'A companion tool to autoXLIFF.py. Helps batch-add translation strings to existing XLIFF documents (useful to add arbitrary strings like those that appear in files other than twig templates, since those are not picked-up automatically by autoXLIFF. Example : form labels in controllers'
 __author__ = 'Jerome Saiz (https://twitter.com/jeromesaiz)'
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 __date__ = '2016/05/12'
 
 # Coloring definition
@@ -77,6 +77,7 @@ def get_setup(args):
 
 def get_source(sourcefile):
   tokens = [line.rstrip('\n') for line in open(sourcefile,'r')]
+  tokens = filter(None, tokens) # remove empty lines
   if not tokens:
     print FAIL+'FATAL : '+ENDC+'Source file '+args.source+' is empty. Please add translation tokens.'
     sys.exit(1)
