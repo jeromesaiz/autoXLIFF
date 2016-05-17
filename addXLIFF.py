@@ -3,7 +3,7 @@
 
 __description__ = 'A companion tool to autoXLIFF.py. Helps batch-add translation strings to existing XLIFF documents (useful to add arbitrary strings like those that appear in files other than twig templates, since those are not picked-up automatically by autoXLIFF. Example : form labels in controllers'
 __author__ = 'Jerome Saiz (https://twitter.com/jeromesaiz)'
-__version__ = '0.0.2'
+__version__ = '0.0.2a'
 __date__ = '2016/05/12'
 
 # Coloring definition
@@ -141,6 +141,13 @@ def prune(trans,keywords):
 def update_locfile(root,ns,trans,keywords,locfile,f,args):
 
   print "\nOperations :"
+
+  # check if file need to be updated
+  if len(keywords) == 0:
+    print 'Nothing to update\n'
+    if f:
+      f.close()
+    return
 
   # Add the new trans-units
   for elem in root.iter(tag=ns+'body'): #ugly hack to skip over other elements between root and body
