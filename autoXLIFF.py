@@ -69,6 +69,15 @@ def get_setup(args):
 
   locfile = os.path.normpath(os.path.join(locpath,args.locfile))
 
+  # look for an exclusion file
+  exclude = os.path.join(locpath,'exclude')
+  try:
+    f = open(exclude,'r')
+  except IOError:
+    print 'No exclusion file found'
+    exclude_list = None
+  # we turn that string into a list
+  exclude_list = f.read().split('\n')
 
   # look for localization file as is, and if we can't find it search for it adding default .xlf or .xliff extensions
   try:
@@ -85,7 +94,7 @@ def get_setup(args):
         # localization file does not exist. It will need to be created
         f = None
 
-  return locfile,twigdir,f
+  return locfile,twigdir,f,exclude_list
 
 
 # Create a XLIFF XML structure
@@ -185,7 +194,7 @@ def parse_twig(twigfiles):
             keywords.add(this_match)
     f.close()
 
-  print 'Found a total of '+str(len(keywords))+' unique trans keywords in your project'
+  print 'Found a total of '+str(len(keywords))+' unique trans keywords in your template files'
   return keywords
 
 
@@ -210,7 +219,7 @@ def get_trans_units(root,ns):
 # @input FILE (file descriptor to XLIFF file)
 # @input argparse.Namespace
 # @return VOID
-def update_locfile(root,ns,trans,keywords,locfile,f,args):
+def update_locfile(root,ns,trans,keywords,locfile,f,args,exclude_list):
   to_add=keywords-trans
   to_delete=trans-keywords
 
@@ -227,7 +236,7 @@ def update_locfile(root,ns,trans,keywords,locfile,f,args):
   # This could be optimized as we parse & iterate twice on the same XML structure here (see get_trans_units)
   # But this allows to decorrelate the getting of trans-units list and the actual XML structure manipulation
   for elem in root.iter(tag=ns+'trans-unit'):
-    if elem.attrib.get('id') in to_delete:
+    if elem.attrib.get('id') in to_delete and elem.attrib.get('id') not in exclude_list :
       print '\t'+FAIL+'removing\t'+ENDC, elem.attrib.get('id')
       elem.getparent().remove(elem)
 
@@ -281,6 +290,7 @@ def Main():
   locfile = setup[0] # locfile points to a valid localization file path, either pre-existing or just created (empty)
   twigdir = setup[1]
   f = setup[2] # file descriptor of language file or None if file did not exist and needs to be created
+  exclude_list = setup[3]
 
   # Create XLIFF structure if file did not exist
   if f == None:
@@ -306,7 +316,7 @@ def Main():
   keywords = parse_twig(twigfiles)
 
   # Update language file
-  update_locfile(root,ns,trans,keywords,locfile,f,args)
+  update_locfile(root,ns,trans,keywords,locfile,f,args,exclude_list)
 
 # Execute
 if __name__ == '__main__':
