@@ -3,7 +3,7 @@
 
 __description__ = 'A tool to help developpers create and update their XLIFF translation files automatically from Twig views. Works out of the box with Silex'
 __author__ = 'Jerome Saiz (https://twitter.com/jeromesaiz)'
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 __date__ = '2016/03/19'
 
 # Coloring definition
