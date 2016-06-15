@@ -33,6 +33,8 @@ With the `--dry` flag, the program will display the number of translation tokens
 By default autoXLIFF will look for Twig templates and XLIFF files in the default Silex directories (*views/* and *locales/*).
 This can be changed using the --locdir parameter (relative path to your project's locales directory) and --twigdir (relative path to your project's Twig templates)
 
+If a file named "exclude" is present in the same directory as the locale files, it will then be parsed as a trans-units exclude list (one name per line). Names found in this file will not be deleted even though autoXLIFF detects them as missing from your project. This is useful to protect trans-units manually added via addXLIFF (those found inside your controllers forms that do not appear in your templates for example) or to preserve translations when their display code has been temporarily removed from the templates.
+
 As usual, `autoXLIFF -h` will display some help.
 
 ## Opinions
